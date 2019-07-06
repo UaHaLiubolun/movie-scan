@@ -1,5 +1,6 @@
 package cn.stark.movie.scan.http;
 
+import cn.stark.movie.scan.util.PropertiesUtil;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -11,7 +12,7 @@ public class HttpServiceGenerate {
 
     static {
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8080")
+                .baseUrl(PropertiesUtil.get("scan-config.properties", "movie-manage-url", ""))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         douBanHttp = retrofit.create(DouBanHttp.class);
