@@ -1,9 +1,12 @@
 package cn.stark.movie.scan.scan;
 
+import cn.stark.movie.scan.util.ScanConfigConst;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.codec.digest.Md5Crypt;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import ws.schild.jave.MultimediaInfo;
+import ws.schild.jave.MultimediaObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,12 +46,27 @@ public class ScanMovie {
             }
         } else {
             String suffix = getSuffix(file.getName());
-
             if (scanConfig.getSuffix().contains(suffix)) {
-                FileInfo fInfo = new FileInfo(scanConfig.getAddress(), getName(file.getName()), file.getAbsolutePath(), suffix, file.length(), getMd5(file));
+                MultimediaInfo multimediaInfo = multimediaInfo(file);
+                if (multimediaInfo == null || getTime(multimediaInfo.getDuration()) < ScanConfigConst.TIME_LIMIT) return;
+                FileInfo fInfo = new FileInfo(scanConfig.getAddress(), getName(file.getName()), file.getAbsolutePath(), suffix, file.length(), getMd5(file), getTime(multimediaInfo.getDuration()));
                 fileInfo.add(fInfo);
             }
         }
+    }
+
+    private MultimediaInfo multimediaInfo(File file) {
+        try {
+            MultimediaObject multimediaObject = new MultimediaObject(file);
+            return multimediaObject.getInfo();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private double getTime(long time) {
+        return time / 1000 / 60;
     }
 
     private String getSuffix(String name) {

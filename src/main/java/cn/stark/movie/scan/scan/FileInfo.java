@@ -19,4 +19,6 @@ public class FileInfo {
 
     private String md5;
 
+    private double time;
+
 }

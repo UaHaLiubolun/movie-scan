@@ -19,4 +19,8 @@ public class PropertiesUtil {
     public static String get(String properties, String key, String d) {
         return get(properties, key) == null ? d : get(properties, key);
     }
+
+    public static String getDefault(String key, String d) {
+        return get("scan-config.properties", key, d);
+    }
 }
