@@ -60,7 +60,6 @@ public class ScanMovie {
             MultimediaObject multimediaObject = new MultimediaObject(file);
             return multimediaObject.getInfo();
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
